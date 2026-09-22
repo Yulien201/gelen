@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Día! - Ramo de Tulipanes Amarillos</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts for Romantic & Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400..800;1,400..800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base typography and layout setup */
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .font-cursive {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Glassmorphism cards styling */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .dark-mode-glass {
+            background: rgba(18, 24, 38, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+        }
+
+        /* Ambient color theme gradients */
+        .theme-dawn {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 35%, #fde68a 70%, #fef08a 100%);
+            color: #78350f;
+        }
+
+        .theme-sunset {
+            background: linear-gradient(135deg, #2e1065 0%, #701a75 35%, #c2410c 70%, #f59e0b 100%);
+            color: #fff7ed;
+        }
+
+        .theme-night {
+            background: linear-gradient(135deg, #090d16 0%, #0f172a 40%, #1e1b4b 70%, #311042 100%);
+            color: #fef08a;
+        }
+
+        /* Glowing text effects */
+        .text-glow-gold {
+            text-shadow: 0 0 20px rgba(250, 204, 21, 0.6), 0 0 40px rgba(234, 179, 8, 0.35);
+        }
+
+        .text-glow-night {
+            text-shadow: 0 0 25px rgba(253, 224, 71, 0.85), 0 0 50px rgba(250, 204, 21, 0.6);
+        }
+
+        /* Floating keyframe animation */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(0.8deg); }
+        }
+
+        .animate-float {
+            animation: floatSlow 6s ease-in-out infinite;
+        }
+
+        /* Canvas element overlay */
+        #tulipCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="theme-dawn min-h-screen w-screen overflow-hidden transition-colors duration-1000 flex flex-col justify-between relative">
+
+    <!-- Interactive Canvas for Tulips Animation -->
+    <canvas id="tulipCanvas"></canvas>
+
+    <!-- Main Content Container -->
+    <main class="relative z-10 flex-1 flex flex-col items-center justify-start pt-10 md:pt-16 px-4 text-center pointer-events-none">
+        
+        <!-- Greeting Card -->
+        <div class="glass-panel p-6 md:p-10 rounded-3xl max-w-2xl w-full pointer-events-auto transition-all duration-700 animate-float">
+            
+            <span id="subtitleTag" class="inline-block px-4 py-1.5 rounded-full text-xs md:text-sm font-semibold tracking-widest uppercase bg-yellow-400/30 text-amber-900 border border-yellow-500/40 mb-3 shadow-sm">
+                ✨ Una Flor Eterna Para Ti ✨
+            </span>
+
+            <h2 id="greetingTitle" class="font-cursive text-5xl sm:text-6xl md:text-7xl font-normal leading-tight drop-shadow-sm">
+                ¡Feliz Día!
+            </h2>
+
+            <h1 id="displayName" class="font-serif-title text-4xl sm:text-6xl md:text-7xl font-bold mt-1 text-amber-800 dark:text-yellow-300 text-glow-gold transition-all duration-300">
+                <!-- El nombre se inserta dinámicamente desde el código JS -->
+            </h1>
+
+            <p id="messageText" class="mt-4 text-sm sm:text-base md:text-lg opacity-90 max-w-lg mx-auto font-light leading-relaxed">
+                Que la calidez, la alegría y la belleza de estos tulipanes amarillos iluminen tu vida y florezcan siempre en tu corazón. Ratita
+            </p>
+
+            <!-- Decorative Divider -->
+            <div class="flex items-center justify-center gap-3 mt-6 opacity-75">
+                <span class="h-[1px] w-12 bg-current opacity-40"></span>
+                <span class="text-xl">🌼</span>
+                <span class="h-[1px] w-12 bg-current opacity-40"></span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Interactive Bottom Floating Control Toolbar -->
+    <footer class="relative z-20 pb-6 px-4 flex justify-center items-center w-full">
+        <div class="glass-panel p-3 md:p-4 rounded-2xl md:rounded-full max-w-xl w-full flex flex-wrap items-center justify-center gap-3 shadow-2xl transition-all duration-300">
+            
+            <!-- Replay Bloom Animation -->
+            <button 
+                id="btnReplay" 
+                title="Volver a Florecer" 
+                class="p-2.5 md:px-4 md:py-2 rounded-xl md:rounded-full bg-yellow-400/40 hover:bg-yellow-400/70 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5 shadow-sm border border-yellow-500/30">
+                <span>🔄</span>
+                <span class="hidden sm:inline">Florecer</span>
+            </button>
+
+            <!-- Ambient Music Toggle -->
+            <button 
+                id="btnMusic" 
+                title="Música de Fondo Relajante" 
+                class="p-2.5 md:px-4 md:py-2 rounded-xl md:rounded-full bg-yellow-400/40 hover:bg-yellow-400/70 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5 shadow-sm border border-yellow-500/30">
+                <span id="musicIcon">🎵</span>
+                <span id="musicText" class="hidden sm:inline">Música</span>
+            </button>
+
+            <!-- Theme Switcher Button -->
+            <button 
+                id="btnTheme" 
+                title="Cambiar Ambiente" 
+                class="p-2.5 md:px-4 md:py-2 rounded-xl md:rounded-full bg-yellow-400/40 hover:bg-yellow-400/70 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5 shadow-sm border border-yellow-500/30">
+                <span id="themeIcon">🌅</span>
+                <span id="themeText" class="hidden sm:inline">Día</span>
+            </button>
+
+            <!-- Toggle Particles/Petals -->
+            <button 
+                id="btnParticles" 
+                title="Activar/Desactivar Pétalos Flotantes" 
+                class="p-2.5 md:px-4 md:py-2 rounded-xl md:rounded-full bg-yellow-400/40 hover:bg-yellow-400/70 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5 shadow-sm border border-yellow-500/30">
+                <span>✨</span>
+                <span class="hidden sm:inline">Efectos</span>
+            </button>
+
+            <!-- Copy Message Button -->
+            <button 
+                id="btnShare" 
+                title="Copiar Mensaje Especial" 
+                class="p-2.5 md:px-4 md:py-2 rounded-xl md:rounded-full bg-amber-500 text-white hover:bg-amber-600 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5 shadow-md">
+                <span>📋</span>
+                <span class="hidden sm:inline">Copiar</span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Notification Toast Modal -->
+    <div id="toast" class="fixed top-6 right-6 z-50 transform translate-y-[-150%] opacity-0 transition-all duration-500 glass-panel px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 border border-yellow-400/50">
+        <span class="text-xl">✨</span>
+        <p id="toastMessage" class="text-sm font-medium">¡Mensaje copiado con éxito!</p>
+    </div>
+
+    <script>
+        /* ===================================================================
+         * ✍️ INSTRUCCIÓN: CAMBIA AQUÍ EL NOMBRE DE LA PERSONA
+         * Modifica el texto entre comillas para personalizar la dedicatoria.
+         * =================================================================== */
+        const NOMBRE_PERSONA = "Gelen🐁";
+        /* =================================================================== */
+
+        // Theme and Visual State management
+        let currentThemeIndex = 0; // 0: Dawn/Day, 1: Sunset, 2: Night
+        const themes = [
+            { id: 'dawn', name: 'Día', icon: '☀️', bodyClass: 'theme-dawn' },
+            { id: 'sunset', name: 'Atardecer', icon: '🌅', bodyClass: 'theme-sunset' },
+            { id: 'night', name: 'Noche', icon: '🌙', bodyClass: 'theme-night' }
+        ];
+
+        let particlesEnabled = true;
+        let audioContext = null;
+        let isMusicPlaying = false;
+        let musicInterval = null;
+
+        // Canvas Setup
+        const canvas = document.getElementById('tulipCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // UI References
+        const displayName = document.getElementById('displayName');
+        const btnReplay = document.getElementById('btnReplay');
+        const btnMusic = document.getElementById('btnMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicText = document.getElementById('musicText');
+        const btnTheme = document.getElementById('btnTheme');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        const btnParticles = document.getElementById('btnParticles');
+        const btnShare = document.getElementById('btnShare');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        // Set the personalized name from the JS variable
+        displayName.textContent = NOMBRE_PERSONA;
+
+        // Resize Canvas dynamically
+        let width, height;
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initTulips();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        class Tulip {
+            constructor(x, baseY, maxHeight, scale = 1.0, delay = 0) {
+                this.x = x;
+                this.baseY = baseY;
+                this.maxHeight = maxHeight;
+                this.scale = scale;
+                this.delay = delay;
+                
+                this.growth = 0; // 0 to 1 growth progress
+                this.bloom = 0;  // 0 to 1 petal opening progress
+                
+                this.swayOffset = Math.random() * Math.PI * 2;
+                this.swaySpeed = 0.0015 + Math.random() * 0.001;
+                this.swayAmount = 14 + Math.random() * 14;
+                
+                // Detailed yellow gradient colors for depth
+                this.stemColor = '#4d7c0f';
+                this.leafColor = '#65a30d';
+                this.petalColors = {
+                    base: '#f59e0b',      // Amber base
+                    main: '#facc15',      // Vibrant yellow
+                    highlight: '#fef08a', // Light yellow top
+                    inner: '#fbbf24'       // Warm inner core
+                };
+            }
+
+            reset() {
+                this.growth = 0;
+                this.bloom = 0;
+            }
+
+            update(time, delta) {
+                if (time < this.delay) return;
+
+                // Stem growth rate
+                if (this.growth < 1) {
+                    this.growth += delta * 0.0006;
+                    if (this.growth > 1) this.growth = 1;
+                }
+
+                // Petal bloom rate (starts once stem is mostly grown)
+                if (this.growth > 0.6 && this.bloom < 1) {
+                    this.bloom += delta * 0.0005;
+                    if (this.bloom > 1) this.bloom = 1;
+                }
+            }
+
+            draw(ctx, time) {
+                if (this.growth <= 0) return;
+
+                const currentH = this.maxHeight * this.easeInOutCubic(this.growth);
+                const sway = Math.sin(time * this.swaySpeed + this.swayOffset) * this.swayAmount * this.growth;
+                
+                const tipX = this.x + sway;
+                const tipY = this.baseY - currentH;
+                const controlX = this.x + sway * 0.4;
+                const controlY = this.baseY - currentH * 0.5;
+
+                ctx.save();
+
+                // 1. Draw Leaves
+                if (this.growth > 0.2) {
+                    const leafGrowth = Math.min(1, (this.growth - 0.2) / 0.8);
+                    
+                    // Left Leaf
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.baseY - currentH * 0.15);
+                    ctx.quadraticCurveTo(
+                        this.x - 35 * this.scale * leafGrowth + sway * 0.2, 
+                        this.baseY - currentH * 0.35, 
+                        this.x - 10 * this.scale, 
+                        this.baseY - currentH * 0.5 * leafGrowth
+                    );
+                    ctx.quadraticCurveTo(
+                        this.x - 10 * this.scale, 
+                        this.baseY - currentH * 0.3, 
+                        this.x, 
+                        this.baseY - currentH * 0.15
+                    );
+                    ctx.fillStyle = this.leafColor;
+                    ctx.fill();
+
+                    // Right Leaf
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.baseY - currentH * 0.25);
+                    ctx.quadraticCurveTo(
+                        this.x + 40 * this.scale * leafGrowth + sway * 0.2, 
+                        this.baseY - currentH * 0.45, 
+                        this.x + 12 * this.scale, 
+                        this.baseY - currentH * 0.6 * leafGrowth
+                    );
+                    ctx.quadraticCurveTo(
+                        this.x + 10 * this.scale, 
+                        this.baseY - currentH * 0.35, 
+                        this.x, 
+                        this.baseY - currentH * 0.25
+                    );
+                    ctx.fillStyle = this.stemColor;
+                    ctx.fill();
+                }
+
+                // 2. Draw Curved Stem
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.baseY);
+                ctx.quadraticCurveTo(controlX, controlY, tipX, tipY);
+                ctx.lineWidth = 7 * this.scale;
+                ctx.strokeStyle = this.stemColor;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+
+                // 3. Draw Tulip Flower Bloom
+                if (this.growth > 0.5) {
+                    const bloomFactor = this.easeInOutCubic(this.bloom);
+                    const headScale = this.scale * Math.min(1, (this.growth - 0.4) / 0.6);
+
+                    ctx.translate(tipX, tipY);
+                    
+                    // Natural tilt based on stem bend
+                    const angle = Math.atan2(tipY - controlY, tipX - controlX) + Math.PI / 2;
+                    ctx.rotate(angle * 0.4);
+
+                    if (currentThemeIndex === 2) {
+                        ctx.shadowBlur = 25;
+                        ctx.shadowColor = '#fde047';
+                    }
+
+                    const petalW = 22 * headScale;
+                    const petalH = 45 * headScale;
+                    const spread = bloomFactor * 18 * headScale;
+
+                    // Inner Petal
+                    ctx.fillStyle = this.petalColors.inner;
+                    ctx.beginPath();
+                    ctx.ellipse(0, -petalH * 0.5, petalW * 0.75, petalH * 0.55, 0, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Left Outer Petal
+                    ctx.save();
+                    ctx.rotate(-0.15 - bloomFactor * 0.25);
+                    const gradLeft = ctx.createLinearGradient(-spread, 0, -spread - petalW, -petalH);
+                    gradLeft.addColorStop(0, this.petalColors.base);
+                    gradLeft.addColorStop(0.5, this.petalColors.main);
+                    gradLeft.addColorStop(1, this.petalColors.highlight);
+
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.bezierCurveTo(
+                        -petalW - spread, -petalH * 0.3,
+                        -petalW * 1.2 - spread, -petalH * 0.8,
+                        -spread * 0.5, -petalH
+                    );
+                    ctx.bezierCurveTo(0, -petalH * 0.7, 0, -petalH * 0.2, 0, 0);
+                    ctx.fillStyle = gradLeft;
+                    ctx.fill();
+                    ctx.restore();
+
+                    // Right Outer Petal
+                    ctx.save();
+                    ctx.rotate(0.15 + bloomFactor * 0.25);
+                    const gradRight = ctx.createLinearGradient(spread, 0, spread + petalW, -petalH);
+                    gradRight.addColorStop(0, this.petalColors.base);
+                    gradRight.addColorStop(0.5, this.petalColors.main);
+                    gradRight.addColorStop(1, this.petalColors.highlight);
+
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.bezierCurveTo(
+                        petalW + spread, -petalH * 0.3,
+                        petalW * 1.2 + spread, -petalH * 0.8,
+                        spread * 0.5, -petalH
+                    );
+                    ctx.bezierCurveTo(0, -petalH * 0.7, 0, -petalH * 0.2, 0, 0);
+                    ctx.fillStyle = gradRight;
+                    ctx.fill();
+                    ctx.restore();
+
+                    // Front Main Petal
+                    const gradCenter = ctx.createLinearGradient(0, 0, 0, -petalH * 1.1);
+                    gradCenter.addColorStop(0, '#f59e0b');
+                    gradCenter.addColorStop(0.4, '#facc15');
+                    gradCenter.addColorStop(1, '#fef9c3');
+
+                    ctx.beginPath();
+                    ctx.moveTo(-petalW * 0.65 - spread * 0.2, -5);
+                    ctx.bezierCurveTo(
+                        -petalW * 0.9, -petalH * 0.5,
+                        -petalW * 0.5, -petalH * 1.05,
+                        0, -petalH * (0.95 + bloomFactor * 0.1)
+                    );
+                    ctx.bezierCurveTo(
+                        petalW * 0.5, -petalH * 1.05,
+                        petalW * 0.9, -petalH * 0.5,
+                        petalW * 0.65 + spread * 0.2, -5
+                    );
+                    ctx.closePath();
+                    ctx.fillStyle = gradCenter;
+                    ctx.fill();
+
+                    // Pollen details
+                    if (bloomFactor > 0.4) {
+                        ctx.fillStyle = '#78350f';
+                        ctx.beginPath();
+                        ctx.arc(-4 * headScale, -petalH * 0.4, 2.5 * headScale, 0, Math.PI * 2);
+                        ctx.arc(4 * headScale, -petalH * 0.4, 2.5 * headScale, 0, Math.PI * 2);
+                        ctx.arc(0, -petalH * 0.48, 2.5 * headScale, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+
+                ctx.restore();
+            }
+
+            easeInOutCubic(x) {
+                return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+            }
+        }
+
+        class FloatingPetal {
+            constructor() { this.reset(); }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = -20 - Math.random() * 100;
+                this.size = 6 + Math.random() * 8;
+                this.speedY = 1 + Math.random() * 1.5;
+                this.speedX = -0.5 + Math.random() * 1;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotSpeed = -0.02 + Math.random() * 0.04;
+                this.opacity = 0.4 + Math.random() * 0.5;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.y * 0.01) + this.speedX;
+                this.rotation += this.rotSpeed;
+                if (this.y > height + 20) this.reset();
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#fde047';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size * 0.5, this.size, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        class Sparkle {
+            constructor() { this.reset(); }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = 1 + Math.random() * 3;
+                this.alpha = Math.random();
+                this.speed = 0.01 + Math.random() * 0.02;
+            }
+
+            update() {
+                this.alpha += this.speed;
+                if (this.alpha > 1 || this.alpha < 0) this.speed = -this.speed;
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, Math.min(1, this.alpha));
+                ctx.fillStyle = currentThemeIndex === 2 ? '#fef08a' : '#ffffff';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        let tulips = [];
+        let particles = [];
+        let sparkles = [];
+
+        function initTulips() {
+            tulips = [];
+            const count = width < 640 ? 5 : 9;
+            const centerX = width / 2;
+            const baseY = height + 20;
+
+            for (let i = 0; i < count; i++) {
+                const offset = (i - (count - 1) / 2);
+                const x = centerX + offset * (width < 640 ? 45 : 65);
+                const distFromCenter = Math.abs(offset);
+                const heightVar = (1 - distFromCenter * 0.08) * (height * 0.42);
+                const randomH = heightVar + (Math.random() * 40 - 20);
+                const scale = 0.85 + Math.random() * 0.3;
+                const delay = distFromCenter * 280 + Math.random() * 200;
+
+                tulips.push(new Tulip(x, baseY, randomH, scale, delay));
+            }
+        }
+
+        function initParticles() {
+            particles = Array.from({ length: 25 }, () => new FloatingPetal());
+            sparkles = Array.from({ length: 40 }, () => new Sparkle());
+        }
+
+        let startTime = null;
+        let lastTime = 0;
+
+        function animate(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const time = timestamp - startTime;
+            const delta = timestamp - lastTime;
+            lastTime = timestamp;
+
+            ctx.clearRect(0, 0, width, height);
+
+            if (particlesEnabled) {
+                sparkles.forEach(s => { s.update(); s.draw(ctx); });
+            }
+
+            tulips.forEach(tulip => {
+                tulip.update(time, delta);
+                tulip.draw(ctx, time);
+            });
+
+            if (particlesEnabled) {
+                particles.forEach(p => { p.update(); p.draw(ctx); });
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        function playRelaxingChord() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            const freqs = [261.63, 329.63, 392.00, 493.88, 523.25, 659.25];
+            const notes = [
+                freqs[Math.floor(Math.random() * freqs.length)],
+                freqs[Math.floor(Math.random() * freqs.length)]
+            ];
+
+            notes.forEach(freq => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(600, audioContext.currentTime);
+
+                gain.gain.setValueAtTime(0, audioContext.currentTime);
+                gain.gain.linearRampToValueAtTime(0.08, audioContext.currentTime + 1.5);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 5.0);
+
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.start();
+                osc.stop(audioContext.currentTime + 5.2);
+            });
+        }
+
+        function toggleMusic() {
+            if (!isMusicPlaying) {
+                isMusicPlaying = true;
+                musicIcon.textContent = '🎶';
+                musicText.textContent = 'Sonando';
+                playRelaxingChord();
+                musicInterval = setInterval(playRelaxingChord, 3500);
+                showToast("🎵 Música ambiental relajante activada");
+            } else {
+                isMusicPlaying = false;
+                musicIcon.textContent = '🎵';
+                musicText.textContent = 'Música';
+                clearInterval(musicInterval);
+                showToast("🔇 Música pausada");
+            }
+        }
+
+        // Event Listeners
+        btnReplay.addEventListener('click', () => {
+            startTime = null;
+            tulips.forEach(t => t.reset());
+            showToast("🌼 ¡Los tulipanes vuelven a florecer!");
+        });
+
+        btnMusic.addEventListener('click', toggleMusic);
+
+        btnTheme.addEventListener('click', () => {
+            const currentTheme = themes[currentThemeIndex];
+            document.body.classList.remove(currentTheme.bodyClass);
+
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            const newTheme = themes[currentThemeIndex];
+
+            document.body.classList.add(newTheme.bodyClass);
+            themeIcon.textContent = newTheme.icon;
+            themeText.textContent = newTheme.name;
+
+            const glassPanels = document.querySelectorAll('.glass-panel');
+            if (newTheme.id === 'night') {
+                glassPanels.forEach(p => p.classList.add('dark-mode-glass'));
+                displayName.classList.replace('text-amber-800', 'text-yellow-300');
+            } else {
+                glassPanels.forEach(p => p.classList.remove('dark-mode-glass'));
+                displayName.classList.replace('text-yellow-300', 'text-amber-800');
+            }
+
+            showToast(`Ambiente: ${newTheme.name}`);
+        });
+
+        btnParticles.addEventListener('click', () => {
+            particlesEnabled = !particlesEnabled;
+            showToast(particlesEnabled ? "✨ Efectos visibles" : "✨ Efectos ocultos");
+        });
+
+        btnShare.addEventListener('click', () => {
+            const message = `¡Feliz Día ${NOMBRE_PERSONA}! 🌼 Te envío este ramo de tulipanes amarillos lleno de luz, belleza y alegría.`;
+            
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = message;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            showToast("📋 ¡Mensaje copiado para compartir!");
+        });
+
+        // Toast Helper
+        let toastTimeout;
+        function showToast(msg) {
+            toastMessage.textContent = msg;
+            toast.classList.remove('translate-y-[-150%]', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-[-150%]', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initialize Engine
+        window.onload = function() {
+            resizeCanvas();
+            initParticles();
+            requestAnimationFrame(animate);
+        };
+    </script>
+</body>
+</html>
